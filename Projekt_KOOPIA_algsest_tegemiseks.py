@@ -25,7 +25,7 @@ kliendid = []
 negKliendid = []
 posKliendid = []
 
-def keskmine(vastus): #keskmise arvutaja
+def keskmine(vastus): #keskmise arvutaja #selle saaks tegelt asendada math moodulist average funktsiooniga
     summa = 0
     jagaja = 0
     
