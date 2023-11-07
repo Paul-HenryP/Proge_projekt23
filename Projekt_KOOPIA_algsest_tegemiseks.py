@@ -21,11 +21,22 @@
 
 #panen kirja algsed andmed, järjendid ja funktsioonid
 import math as m
+from matplotlib import pyplot as plt
+import numpy as np
 kliendid = []
+intkliendid = []
 negKliendid = []
 posKliendid = []
 
-def keskmine(vastus): #keskmise arvutaja #selle saaks tegelt asendada math moodulist average funktsiooniga
+def andmedJärjendiks(fail):
+    jarjend = []
+    for rida in fail:
+        puhasrida = rida.strip()
+        jarjend.append(int(puhasrida))
+    return jarjend
+
+
+def keskmine(vastus): #keskmise arvutamise saaks tegelt asendada math moodulist average funktsiooniga
     summa = 0
     jagaja = 0
     
@@ -34,23 +45,24 @@ def keskmine(vastus): #keskmise arvutaja #selle saaks tegelt asendada math moodu
             
             summa += int(el) #klientide kogusumma jagatud klientide arvuga, kordub b ja c puhul.
             jagaja += 1
-        kesk = summa/jagaja
+        kesk = sum(posKliendid)/len(posKliendid)
         return kesk
     elif vastus == "b":
         for el in negKliendid: # loeb neg klientide järjendist
             
             summa += int(el)
             jagaja += 1
-        kek = summa/jagaja
-        return kek
+        try:
+            kek = summa/jagaja
+            return kek
+        except ZeroDivisionError:
+            print("Selles vahemikus kliente ei vähenenud")
     else:
         for el in kliendid: #loeb järjendist, kus on nii pos kui neg arvud
-            
             summa += int(el)
             jagaja += 1
-        keskm = summa/jagaja
-        return keskm
-
+        segakeskm = summa/jagaja
+        return segakeskm
 
 
 def loenFailist(midaLoen,algusaasta,lõppaasta):
@@ -67,7 +79,7 @@ def loenFailist(midaLoen,algusaasta,lõppaasta):
                     if int(kliendid[i]) > 0:  #positiivsed arvud
                         print(str(alates + m)+": "+str(kliendid[i])) # m on õigete aastate kuvamise jaoks
                         m += 1 #aasta suureneb iga tsükliga
-                        posKliendid.append(kliendid[i]) #lisab pos andmed positiivsete andmete järjendisse
+                        posKliendid.append(int(kliendid[i])) #lisab pos andmed positiivsete andmete globaalsesse järjendisse
                         i += 1 # tsükli lugeja suureneb
                     else:
                         m += 1 
@@ -87,7 +99,7 @@ def loenFailist(midaLoen,algusaasta,lõppaasta):
                     if int(kliendid[i]) < 0:   # negatiivsed
                         print(str(alates + m)+": "+str(kliendid[i]))
                         m += 1
-                        negKliendid.append(kliendid[i]) #negatiivsed järjendisse
+                        negKliendid.append(kliendid[i]) #negatiivsed glob. järjendisse
                         i += 1
                     else:
                         m += 1
@@ -121,14 +133,16 @@ def loenFailist(midaLoen,algusaasta,lõppaasta):
 #küsin kasutajalt täiendavaid andmeid
     
 try:
-    failNimi = input("Sisestage faili nimi: ")
-#del#failNimi = "kliendid.txt"
+    #failNimi = input("Sisestage faili nimi: ")
+
+    failNimi = "kliendid.txt"
 
     f = open(failNimi, encoding = "UTF-8")
 except FileNotFoundError:
-    print("Vale faili nimi.")
+    print("Vale faili nimi. Kontrolli, et fail oleks samas kasutas Thonny failidega.")
 for rida in f:
     kliendid.append(rida.strip("\n"))
+    intkliendid.append(int(rida.strip("\n")))
 
 vastus_kolmas = input("Kas soovite Näha aastaid, millal kliente tuli juurde (a), vähenes (b), mõlemat (c) või ei soovi midagi kuvada(x)? ")
 
@@ -136,7 +150,7 @@ vastus_kolmas = input("Kas soovite Näha aastaid, millal kliente tuli juurde (a)
 if vastus_kolmas == "a":
     alates = int(input("Alates mitmendast aastast soovite informatsiooni arvestada?(2010-2020) "))
     
-    kuni = int(input("Kuni mis aastani soovite informatsiooni arvestada? "))
+    kuni = int(input("Kuni mis aastani soovite informatsiooni arvestada? (2010-2020) "))
     
     if alates < 2010 or alates > 2020: #sisestatud aastate kontroll 
         print("Vigane aasta sisestus.")
@@ -145,11 +159,12 @@ if vastus_kolmas == "a":
     else: #käivitab funktsioonid
         loenFailist(vastus_kolmas,alates,kuni) 
         print("Valitud aastate keskmine oli "+ str(round(keskmine(vastus_kolmas),2))+" klienti aastas.")
+        #MATPLOTLIB PLACEHOLDER - kuvab alates, kuni ja mis aastatel suurenes(kui palju)
     
 
 elif vastus_kolmas == "b":
-    alates = int(input("Alates mitmendast aastast soovite informatsiooni arvestada? "))
-    kuni = int(input("Kuni mis aastani soovite informatsiooni arvestada? "))
+    alates = int(input("Alates mitmendast aastast soovite informatsiooni arvestada? (2010-2020) "))
+    kuni = int(input("Kuni mis aastani soovite informatsiooni arvestada? (2010-2020) "))
     
     if alates < 2010 or alates > 2020: #sisestatud aastate kontroll 
         print("Vigane aasta sisestus.")
@@ -158,11 +173,12 @@ elif vastus_kolmas == "b":
     else: #käivitab funktsioonid
         loenFailist(vastus_kolmas,alates,kuni)
         print("Valitud aastate keskmine oli "+ str(round(keskmine(vastus_kolmas),2))+" klienti aastas.")
+        #MATPLOTLIB PLACEHOLDER - kuvab alates, kuni ja mis aastatel vähenes ja kui palju
     
-elif vastus_kolmas == "c":
-    alates = int(input("Alates mitmendast aastast soovite informatsiooni arvestada? "))
+elif vastus_kolmas == "c": #molemad
+    alates = int(input("Alates mitmendast aastast soovite informatsiooni arvestada? (2010-2020) "))
     
-    kuni = int(input("Kuni mis aastani soovite informatsiooni arvestada? "))
+    kuni = int(input("Kuni mis aastani soovite informatsiooni arvestada? (2010-2020) "))
     
     if alates < 2010 or alates > 2020: #sisestatud aastate kontroll 
         print("Vigane aasta sisestus.")
@@ -171,10 +187,35 @@ elif vastus_kolmas == "c":
     else: #käivitab funktsioonid
         loenFailist(vastus_kolmas,alates,kuni)
         print("Aastate keskmine oli "+str(round(keskmine(vastus_kolmas),2))+" klienti aastas.")
+        #MATPLOTLIB PLACEHOLDER - kuvab alates, kuni ja mis aastatel vähenes ja suurenes(kui palju )
+        plt.style.use('_mpl-gallery')
+        y_vaartused = intkliendid
+        x = 0.5 + np.arange(len(y_vaartused)) #leny peab vastama listi pikkusele
+        fig, ax = plt.subplots()
+        ax.bar(x, y_vaartused, width=0.5, edgecolor="white", linewidth=0.7, label="Kliendid")
+        ax.set(xlim=(0, len(y_vaartused)), xticks=np.arange(1, len(y_vaartused)),
+            ylim=(0, max(y_vaartused)+1), yticks=np.arange(1, max(y_vaartused), 10))
+        plt.show()
+
+
 elif vastus_kolmas == "x": #kui ei soovita midagi kuvada
     print("Te ei soovinud midagi kuvada.")
-else: # vigase vastuse kontroll
+else:
     print("Vigane vastus.")
-    
 
+#MATPLOTLIB OSA
+    
+""" plt.style.use('_mpl-gallery')
+
+# make data:
+y = [4.8, 5.5, 3.5, 4.6, 6.5, 6.6, 2.6, 3.0, 4.0] #siia klientide arvud 12 kuu kaupay
+x = 0.5 + np.arange(len(y)) #leny peab vastama listi pikkusele
+
+fig, ax = plt.subplots()
+
+ax.bar(x, y, width=0.5, edgecolor="white", linewidth=0.7, label="Kliendid")
+ax.set(xlim=(0, 12), xticks=np.arange(1, 13),
+       ylim=(0, max(y)+1), yticks=np.arange(1, max(y)))
+ """
+#plt.show()
 f.close()
