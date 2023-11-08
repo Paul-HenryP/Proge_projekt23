@@ -157,8 +157,8 @@ try:
 except FileNotFoundError:
     print("Vale faili nimi. Kontrolli, et fail oleks samas kasutas Thonny failidega.")
 
-vastus_kolmas = input("Kas soovite Näha aastaid, millal kliente tuli juurde (a), vähenes (b), mõlemat (c) või ei soovi midagi kuvada(x)? ")
-
+#vastus_kolmas = input("Kas soovite Näha aastaid, millal kliente tuli juurde (a), vähenes (b), mõlemat (c) või ei soovi midagi kuvada(x)? ")
+vastus_kolmas = 'c'
 
 if vastus_kolmas == "a":
     alates = int(input("Alates mitmendast aastast soovite informatsiooni arvestada?(2010-2020) "))
@@ -205,15 +205,24 @@ elif vastus_kolmas == "c": #molemad
         plt.style.use('fivethirtyeight')
         y_vaartused = ckasv #vahemik kus molemad
         x = 0.5 + np.arange(len(y_vaartused)) #leny peab vastama listi pikkusele
-        fig, ax = plt.subplots()
-        ax.bar(x, y_vaartused, width=0.5, edgecolor="white", linewidth=0.7, label="Kliendid")
+        #fig, ax = plt.subplots()
+        #ax.bar(x, y_vaartused, width=0.5, edgecolor="white", linewidth=0.7, label="Kliendid")
 
-        ax.set(xlim=(0, len(y_vaartused)), xticks=np.arange(0, len(y_vaartused)),
-            ylim=(0, max(ckasvint)+1), yticks=np.arange(0, max(ckasvint), 15))
-        ax.set_xticklabels(cvahemik)
-        plt.title("Klientide kasv")
-        plt.legend()
-        plt.show()
+        #ax.set(xlim=(0, len(y_vaartused)), xticks=np.arange(0, len(y_vaartused)))#,
+            #ylim=(0, max(ckasvint)+1))#, yticks=np.arange(0, max(ckasvint), 10))
+        #ax.set_xticklabels(cvahemik)
+
+        #ax.set_yticklabels(np.arange(0, max(ckasvint), 10))
+
+        #ax.set(ylim=(0, max(ckasvint)+10))
+        plt.bar(cvahemik, ckasvint, color ='maroon', 
+        width = 0.4)
+        plt.plot(round(np.average(intkliendid),2)) #kuidas seda joonena kujutada?
+
+        plt.title("Klientide muutus")
+        plt.ylabel("klientide arv")
+        #plt.legend()
+        plt.show() #nyyd voiks kuvada keskmist joonena
 
 
 elif vastus_kolmas == "x": #kui ei soovita midagi kuvada
