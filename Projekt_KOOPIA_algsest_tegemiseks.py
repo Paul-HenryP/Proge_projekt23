@@ -1,5 +1,5 @@
 #Programmi autor on Paul-Henry Paltmann
-#Viimane muudatus: 21.03.2022
+#Viimane muudatus: 07.11.2023
 
 # Ülesande püstitus: Investorid soovivad teada ettevõtte eelnevate aastate kliendivõrgustiku kasvu. 
 # Ettevõte loodi aastal 2010. Ettevõttel on vaja enne koosolekut arvutada kui palju kliente on eelneva 10 aasta jooksul keskmiselt nendega liitunud.
@@ -24,8 +24,15 @@ import math as m
 from matplotlib import pyplot as plt
 import numpy as np
 kliendid = []
-intkliendid = []
-negKliendid = []
+
+intkliendid = []#uued
+negintkliendid = []
+posintkliendid = []
+cvahemik = []
+ckasv = []
+ckasvint = []
+
+negKliendid = []#vanad
 posKliendid = []
 
 def andmedJärjendiks(fail):
@@ -36,7 +43,7 @@ def andmedJärjendiks(fail):
     return jarjend
 
 
-def keskmine(vastus): #keskmise arvutamise saaks tegelt asendada math moodulist average funktsiooniga
+def keskmine(vastus): #keskmise arvutamise saaks tegelt asendada math moodulist average funktsiooniga# tehtud, nyyd saab selle fun. eemaldada?
     summa = 0
     jagaja = 0
     
@@ -77,7 +84,7 @@ def loenFailist(midaLoen,algusaasta,lõppaasta):
                 
                 if i <= lõppaasta:
                     if int(kliendid[i]) > 0:  #positiivsed arvud
-                        print(str(alates + m)+": "+str(kliendid[i])) # m on õigete aastate kuvamise jaoks
+                        print(str(alates + m)+": "+str(kliendid[i])) # m suurendab aastaid igal tsüklil ja print kuvab mitu klienti see aasta liitus
                         m += 1 #aasta suureneb iga tsükliga
                         posKliendid.append(int(kliendid[i])) #lisab pos andmed positiivsete andmete globaalsesse järjendisse
                         i += 1 # tsükli lugeja suureneb
@@ -119,6 +126,9 @@ def loenFailist(midaLoen,algusaasta,lõppaasta):
                 
                 if i <= lõppaasta:
                     print(str(alates + m)+": "+str(kliendid[i])) # nii positiivsed kui negatiivsed aastad
+                    cvahemik.append(str(alates + m))
+                    ckasv.append(kliendid[i])
+                    ckasvint.append(int(kliendid[i]))
                     m += 1
                     i += 1
                     
@@ -128,21 +138,24 @@ def loenFailist(midaLoen,algusaasta,lõppaasta):
             else:
                 i += 1
         
-    f.close()
+    #f.close()
 
 #küsin kasutajalt täiendavaid andmeid
     
 try:
     #failNimi = input("Sisestage faili nimi: ")
-
     failNimi = "kliendid.txt"
-
     f = open(failNimi, encoding = "UTF-8")
+    for rida in f:
+        kliendid.append(rida.strip("\n"))
+        intkliendid.append(int(rida.strip("\n")))
+    for el in intkliendid:
+        if el < 0:
+            negintkliendid.append(el)
+        elif el >= 0:
+            posintkliendid.append(el)
 except FileNotFoundError:
     print("Vale faili nimi. Kontrolli, et fail oleks samas kasutas Thonny failidega.")
-for rida in f:
-    kliendid.append(rida.strip("\n"))
-    intkliendid.append(int(rida.strip("\n")))
 
 vastus_kolmas = input("Kas soovite Näha aastaid, millal kliente tuli juurde (a), vähenes (b), mõlemat (c) või ei soovi midagi kuvada(x)? ")
 
@@ -158,7 +171,7 @@ if vastus_kolmas == "a":
         print("Vigane aasta sisestus.")
     else: #käivitab funktsioonid
         loenFailist(vastus_kolmas,alates,kuni) 
-        print("Valitud aastate keskmine oli "+ str(round(keskmine(vastus_kolmas),2))+" klienti aastas.")
+        print("Valitud aastate keskmine oli "+ str(round(np.average(posintkliendid),2))+" klienti aastas.")
         #MATPLOTLIB PLACEHOLDER - kuvab alates, kuni ja mis aastatel suurenes(kui palju)
     
 
@@ -172,7 +185,7 @@ elif vastus_kolmas == "b":
         print("Vigane aasta sisestus.")
     else: #käivitab funktsioonid
         loenFailist(vastus_kolmas,alates,kuni)
-        print("Valitud aastate keskmine oli "+ str(round(keskmine(vastus_kolmas),2))+" klienti aastas.")
+        print("Valitud aastate keskmine oli "+ str(round(np.average(negintkliendid),2))+" klienti aastas.")#keskmine(vastus_kolmas),2))+" klienti aastas.")
         #MATPLOTLIB PLACEHOLDER - kuvab alates, kuni ja mis aastatel vähenes ja kui palju
     
 elif vastus_kolmas == "c": #molemad
@@ -186,15 +199,20 @@ elif vastus_kolmas == "c": #molemad
         print("Vigane aasta sisestus.")
     else: #käivitab funktsioonid
         loenFailist(vastus_kolmas,alates,kuni)
-        print("Aastate keskmine oli "+str(round(keskmine(vastus_kolmas),2))+" klienti aastas.")
+        print("Aastate keskmine oli "+str(round(np.average(intkliendid),2))+" klienti aastas.")#keskmine(vastus_kolmas),2))+" klienti aastas.")
+
         #MATPLOTLIB PLACEHOLDER - kuvab alates, kuni ja mis aastatel vähenes ja suurenes(kui palju )
-        plt.style.use('_mpl-gallery')
-        y_vaartused = intkliendid
+        plt.style.use('fivethirtyeight')
+        y_vaartused = ckasv #vahemik kus molemad
         x = 0.5 + np.arange(len(y_vaartused)) #leny peab vastama listi pikkusele
         fig, ax = plt.subplots()
         ax.bar(x, y_vaartused, width=0.5, edgecolor="white", linewidth=0.7, label="Kliendid")
-        ax.set(xlim=(0, len(y_vaartused)), xticks=np.arange(1, len(y_vaartused)),
-            ylim=(0, max(y_vaartused)+1), yticks=np.arange(1, max(y_vaartused), 10))
+
+        ax.set(xlim=(0, len(y_vaartused)), xticks=np.arange(0, len(y_vaartused)),
+            ylim=(0, max(ckasvint)+1), yticks=np.arange(0, max(ckasvint), 15))
+        ax.set_xticklabels(cvahemik)
+        plt.title("Klientide kasv")
+        plt.legend()
         plt.show()
 
 
