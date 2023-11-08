@@ -31,6 +31,7 @@ posintkliendid = []
 cvahemik = []
 ckasv = []
 ckasvint = []
+keskvaartused = []
 
 negKliendid = []#vanad
 posKliendid = []
@@ -215,13 +216,16 @@ elif vastus_kolmas == "c": #molemad
         #ax.set_yticklabels(np.arange(0, max(ckasvint), 10))
 
         #ax.set(ylim=(0, max(ckasvint)+10))
-        plt.bar(cvahemik, ckasvint, color ='maroon', 
-        width = 0.4)
-        plt.plot(round(np.average(intkliendid),2)) #kuidas seda joonena kujutada?
+        plt.bar(cvahemik, ckasvint, color ='maroon', width = 0.4)
+
+        for el in ckasvint:
+            keskvaartused.append(round(np.average(intkliendid),2))
+
+        plt.plot(cvahemik, keskvaartused) #kuidas seda joonena kujutada?
 
         plt.title("Klientide muutus")
         plt.ylabel("klientide arv")
-        #plt.legend()
+        plt.legend(["Keksmine klientide muutus", "Klientide muutus aasta jooksul"])
         plt.show() #nyyd voiks kuvada keskmist joonena
 
 
