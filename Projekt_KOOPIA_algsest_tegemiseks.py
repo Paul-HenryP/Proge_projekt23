@@ -158,8 +158,8 @@ def loenFailist(midaLoen,algusaasta,lõppaasta):
 #küsin kasutajalt täiendavaid andmeid
     
 try:
-    #failNimi = input("Sisestage faili nimi: ")
-    failNimi = "kliendid.txt"
+    failNimi = input("Sisestage faili nimi: ")
+    #failNimi = "kliendid.txt"
     f = open(failNimi, encoding = "UTF-8")
     for rida in f:
         kliendid.append(rida.strip("\n"))
@@ -172,8 +172,8 @@ try:
 except FileNotFoundError:
     print("Vale faili nimi. Kontrolli, et fail oleks samas kasutas programmi failidega.")
 
-#vastus_kolmas = input("Kas soovite Näha aastaid, millal kliente tuli juurde (a), vähenes (b), mõlemat (c) või ei soovi midagi kuvada(x)? ")
-vastus_kolmas = 'a'
+vastus_kolmas = input("Kas soovite Näha aastaid, millal kliente tuli juurde (a), vähenes (b), mõlemat (c) või ei soovi midagi kuvada(x)? ")
+#vastus_kolmas = 'a'
 
 if vastus_kolmas == "a":
     alates = int(input("Alates mitmendast aastast soovite informatsiooni arvestada?(2010-2020) "))
@@ -195,11 +195,10 @@ if vastus_kolmas == "a":
         plt.bar(avahemik, akasvint, color ='maroon', width = 0.4)
 
         for el in akasvint:
-            keskvaartused.append(round(np.average(posintkliendid),2))
+            keskvaartused.append(round(np.average(posintkliendid),2)) #kuvab tulpade arvud
 
         plt.plot(avahemik, keskvaartused) #aastate keskmiste joon(sinine)
         plt.text(len(avahemik) - 1+0.4, keskvaartused[-1], str(round(keskvaartused[-1], 2)), color='blue', ha='center', va='bottom')
-        #plt.text(avahemik, keskvaartused, str(keskvaartused), color='black', ha='center', va='bottom')
 
         for i, v in enumerate(akasvint):
             plt.text(i , v, str(v), color='black', ha='center', va='bottom') #for loop kuvab numbreid tulpade kohal
