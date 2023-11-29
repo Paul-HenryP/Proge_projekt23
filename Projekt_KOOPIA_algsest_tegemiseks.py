@@ -239,7 +239,7 @@ elif vastus_kolmas == "b":
         plt.title("Negatiivne klientide muutus")
         plt.ylabel("klientide arv")
         plt.legend(["Keksmine klientide muutus", "Klientide muutus igal aastal"])
-        plt.show() #nyyd voiks kuvada keskmist joonena
+        plt.show()
     
 elif vastus_kolmas == "c": #molemad
     alates = int(input("Alates mitmendast aastast soovite informatsiooni arvestada? (2010-2020) "))
@@ -271,7 +271,7 @@ elif vastus_kolmas == "c": #molemad
         plt.title("Klientide muutus")
         plt.ylabel("klientide arv")
         plt.legend(["Keksmine klientide muutus", "Klientide muutus igal aastal"])
-        plt.show() #nyyd voiks kuvada keskmist joonena
+        plt.show()
 
 
 elif vastus_kolmas == "x": #kui ei soovita midagi kuvada
