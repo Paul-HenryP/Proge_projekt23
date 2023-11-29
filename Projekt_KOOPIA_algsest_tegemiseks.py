@@ -19,7 +19,6 @@
 
 
 
-#panen kirja algsed andmed, järjendid ja funktsioonid
 import math as m
 from matplotlib import pyplot as plt
 import numpy as np
@@ -28,13 +27,22 @@ kliendid = []
 intkliendid = []#uued
 negintkliendid = []
 posintkliendid = []
+#a
+avahemik = []
+akasv = []
+akasvint = []
+#b
+bvahemik = []
+bkasv = []
+bkasvint = []
+#c
 cvahemik = []
 ckasv = []
 ckasvint = []
 keskvaartused = []
 
-negKliendid = []#vanad
-posKliendid = []
+negKliendid = []#vanad, ära kasuta
+posKliendid = []#vanad
 
 def andmedJärjendiks(fail):
     jarjend = []
@@ -44,7 +52,7 @@ def andmedJärjendiks(fail):
     return jarjend
 
 
-def keskmine(vastus): #keskmise arvutamise saaks tegelt asendada math moodulist average funktsiooniga# tehtud, nyyd saab selle fun. eemaldada?
+#def keskmine(vastus): #keskmise arvutamise saaks tegelt asendada math moodulist average funktsiooniga # tehtud, nyyd saab selle fun. eemaldada?
     summa = 0
     jagaja = 0
     
@@ -86,9 +94,12 @@ def loenFailist(midaLoen,algusaasta,lõppaasta):
                 if i <= lõppaasta:
                     if int(kliendid[i]) > 0:  #positiivsed arvud
                         print(str(alates + m)+": "+str(kliendid[i])) # m suurendab aastaid igal tsüklil ja print kuvab mitu klienti see aasta liitus
+                        avahemik.append(str(alates + m))
+                        akasv.append(kliendid[i])
+                        akasvint.append(int(kliendid[i]))
                         m += 1 #aasta suureneb iga tsükliga
                         posKliendid.append(int(kliendid[i])) #lisab pos andmed positiivsete andmete globaalsesse järjendisse
-                        i += 1 # tsükli lugeja suureneb
+                        i += 1 
                     else:
                         m += 1 
                         i += 1
@@ -106,6 +117,9 @@ def loenFailist(midaLoen,algusaasta,lõppaasta):
                 if i <= lõppaasta:
                     if int(kliendid[i]) < 0:   # negatiivsed
                         print(str(alates + m)+": "+str(kliendid[i]))
+                        bvahemik.append(str(alates + m))
+                        bkasv.append(kliendid[i])
+                        bkasvint.append(int(kliendid[i]))
                         m += 1
                         negKliendid.append(kliendid[i]) #negatiivsed glob. järjendisse
                         i += 1
@@ -156,14 +170,13 @@ try:
         elif el >= 0:
             posintkliendid.append(el)
 except FileNotFoundError:
-    print("Vale faili nimi. Kontrolli, et fail oleks samas kasutas Thonny failidega.")
+    print("Vale faili nimi. Kontrolli, et fail oleks samas kasutas programmi failidega.")
 
 #vastus_kolmas = input("Kas soovite Näha aastaid, millal kliente tuli juurde (a), vähenes (b), mõlemat (c) või ei soovi midagi kuvada(x)? ")
-vastus_kolmas = 'c'
+vastus_kolmas = 'a'
 
 if vastus_kolmas == "a":
     alates = int(input("Alates mitmendast aastast soovite informatsiooni arvestada?(2010-2020) "))
-    
     kuni = int(input("Kuni mis aastani soovite informatsiooni arvestada? (2010-2020) "))
     
     if alates < 2010 or alates > 2020: #sisestatud aastate kontroll 
@@ -173,7 +186,28 @@ if vastus_kolmas == "a":
     else: #käivitab funktsioonid
         loenFailist(vastus_kolmas,alates,kuni) 
         print("Valitud aastate keskmine oli "+ str(round(np.average(posintkliendid),2))+" klienti aastas.")
+
         #MATPLOTLIB PLACEHOLDER - kuvab alates, kuni ja mis aastatel suurenes(kui palju)
+        plt.style.use('fivethirtyeight')
+        y_vaartused = akasv #vahemik kus pos
+        x = 0.5 + np.arange(len(y_vaartused)) #len y peab vastama listi pikkusele
+
+        plt.bar(avahemik, akasvint, color ='maroon', width = 0.4)
+
+        for el in akasvint:
+            keskvaartused.append(round(np.average(posintkliendid),2))
+
+        plt.plot(avahemik, keskvaartused) #aastate keskmiste joon(sinine)
+        plt.text(len(avahemik) - 1+0.4, keskvaartused[-1], str(round(keskvaartused[-1], 2)), color='blue', ha='center', va='bottom')
+        #plt.text(avahemik, keskvaartused, str(keskvaartused), color='black', ha='center', va='bottom')
+
+        for i, v in enumerate(akasvint):
+            plt.text(i , v, str(v), color='black', ha='center', va='bottom') #for loop kuvab numbreid tulpade kohal
+
+        plt.title("Positiivne klientide muutus")
+        plt.ylabel("klientide arv")
+        plt.legend(["Keksmine klientide muutus", "Klientide muutus igal aastal"])
+        plt.show() #näitab plotti
     
 
 elif vastus_kolmas == "b":
@@ -186,12 +220,30 @@ elif vastus_kolmas == "b":
         print("Vigane aasta sisestus.")
     else: #käivitab funktsioonid
         loenFailist(vastus_kolmas,alates,kuni)
-        print("Valitud aastate keskmine oli "+ str(round(np.average(negintkliendid),2))+" klienti aastas.")#keskmine(vastus_kolmas),2))+" klienti aastas.")
+        print("Valitud aastate keskmine oli "+ str(round(np.average(negintkliendid),2))+" klienti aastas.")
         #MATPLOTLIB PLACEHOLDER - kuvab alates, kuni ja mis aastatel vähenes ja kui palju
+
+        plt.style.use('fivethirtyeight')
+        y_vaartused = bkasv #vahemik kus neg
+        x = 0.5 + np.arange(len(y_vaartused)) #leny peab vastama listi pikkusele
+
+        plt.bar(bvahemik, bkasvint, color ='maroon', width = 0.4)
+
+        for el in bkasvint:
+            keskvaartused.append(round(np.average(negintkliendid),2))
+
+        plt.plot(bvahemik, keskvaartused) 
+        plt.text(len(bvahemik)-1+0.4, keskvaartused[-1], str(round(keskvaartused[-1], 0)), color='blue', ha='center', va='bottom')
+        for i, v in enumerate(bkasvint):
+            plt.text(i , v, str(v), color='black', ha='center', va='bottom')
+
+        plt.title("Negatiivne klientide muutus")
+        plt.ylabel("klientide arv")
+        plt.legend(["Keksmine klientide muutus", "Klientide muutus igal aastal"])
+        plt.show() #nyyd voiks kuvada keskmist joonena
     
 elif vastus_kolmas == "c": #molemad
     alates = int(input("Alates mitmendast aastast soovite informatsiooni arvestada? (2010-2020) "))
-    
     kuni = int(input("Kuni mis aastani soovite informatsiooni arvestada? (2010-2020) "))
     
     if alates < 2010 or alates > 2020: #sisestatud aastate kontroll 
@@ -200,32 +252,26 @@ elif vastus_kolmas == "c": #molemad
         print("Vigane aasta sisestus.")
     else: #käivitab funktsioonid
         loenFailist(vastus_kolmas,alates,kuni)
-        print("Aastate keskmine oli "+str(round(np.average(intkliendid),2))+" klienti aastas.")#keskmine(vastus_kolmas),2))+" klienti aastas.")
+        print("Aastate keskmine oli "+str(round(np.average(intkliendid),2))+" klienti aastas.")
 
-        #MATPLOTLIB PLACEHOLDER - kuvab alates, kuni ja mis aastatel vähenes ja suurenes(kui palju )
+        #MATPLOTLIB PLACEHOLDER - kuvab alates, kuni ja mis aastatel vähenes ja suurenes
         plt.style.use('fivethirtyeight')
         y_vaartused = ckasv #vahemik kus molemad
         x = 0.5 + np.arange(len(y_vaartused)) #leny peab vastama listi pikkusele
-        #fig, ax = plt.subplots()
-        #ax.bar(x, y_vaartused, width=0.5, edgecolor="white", linewidth=0.7, label="Kliendid")
-
-        #ax.set(xlim=(0, len(y_vaartused)), xticks=np.arange(0, len(y_vaartused)))#,
-            #ylim=(0, max(ckasvint)+1))#, yticks=np.arange(0, max(ckasvint), 10))
-        #ax.set_xticklabels(cvahemik)
-
-        #ax.set_yticklabels(np.arange(0, max(ckasvint), 10))
-
-        #ax.set(ylim=(0, max(ckasvint)+10))
         plt.bar(cvahemik, ckasvint, color ='maroon', width = 0.4)
 
         for el in ckasvint:
             keskvaartused.append(round(np.average(intkliendid),2))
 
-        plt.plot(cvahemik, keskvaartused) #kuidas seda joonena kujutada?
+        plt.plot(cvahemik, keskvaartused)
+        plt.text(len(cvahemik)-1+0.4, keskvaartused[-1], str(round(keskvaartused[-1], 0)), color='blue', ha='center', va='bottom')
+
+        for i, v in enumerate(ckasvint):
+            plt.text(i , v, str(v), color='black', ha='center', va='bottom')
 
         plt.title("Klientide muutus")
         plt.ylabel("klientide arv")
-        plt.legend(["Keksmine klientide muutus", "Klientide muutus aasta jooksul"])
+        plt.legend(["Keksmine klientide muutus", "Klientide muutus igal aastal"])
         plt.show() #nyyd voiks kuvada keskmist joonena
 
 
@@ -234,19 +280,6 @@ elif vastus_kolmas == "x": #kui ei soovita midagi kuvada
 else:
     print("Vigane vastus.")
 
-#MATPLOTLIB OSA
-    
-""" plt.style.use('_mpl-gallery')
-
-# make data:
-y = [4.8, 5.5, 3.5, 4.6, 6.5, 6.6, 2.6, 3.0, 4.0] #siia klientide arvud 12 kuu kaupay
-x = 0.5 + np.arange(len(y)) #leny peab vastama listi pikkusele
-
-fig, ax = plt.subplots()
-
-ax.bar(x, y, width=0.5, edgecolor="white", linewidth=0.7, label="Kliendid")
-ax.set(xlim=(0, 12), xticks=np.arange(1, 13),
-       ylim=(0, max(y)+1), yticks=np.arange(1, max(y)))
- """
-#plt.show()
 f.close()
+
+#Plottimise saaks tegelt funktsiooniks teha sest sisaldab palju kordavat teavet

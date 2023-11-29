@@ -16,10 +16,13 @@ ax.bar(x, y, width=0.5, edgecolor="white", linewidth=0.7, label="Kliendid")
 ax.set(xlim=(0, 12), xticks=np.arange(1, 13),
        ylim=(0, max(y)+1), yticks=np.arange(0, max(y))) #y np.arange on hallide kriipsude kogus, vasak korgus
 ax.set_xticklabels(['zero','two','four','six', "a", 'zero','two','four','six', "a", "e", "h"])#peab olema sama kogus kui on y vaartuseid
-
+for i, v in enumerate(y):
+    plt.text(i +0.5, v, str(v), color='black', ha='center', va='bottom')
+    
 print(np.average(y))
 
 plt.legend()
-plt.title("Klientide kasv") #pealkiri
+plt.title("Klientide muutus") #pealkiri
 plt.xlabel("aastad") #x vaarttuste pealkiri
+plt.ylabel("klientide arv")
 plt.show()
