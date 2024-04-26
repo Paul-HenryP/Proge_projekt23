@@ -41,7 +41,9 @@ Vastavalt soovile, aastad, kus kliente tuli juurde, vähenes, mõlemad diagrammi
 
 ![ff3b](https://github.com/Paul-HenryP/Proge_projekt23/assets/104301931/b706ac9f-e8c5-4ccc-a44e-5ca956399662)
 
+![fff4x](https://github.com/Paul-HenryP/Proge_projekt23/assets/104301931/bd6d7520-50cf-452e-862f-ed0b5057bafd)
 
+![projcpc](https://github.com/Paul-HenryP/Proge_projekt23/assets/104301931/f12ab744-03a7-4bbb-9035-629a9a622ead)
 
 
 
