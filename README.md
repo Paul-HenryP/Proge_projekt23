@@ -35,3 +35,6 @@ Soovitud aastate vahemikus (2010-2020) ja selles vahemikus aastas keskmiselt lii
 Vastavalt soovile, aastad, kus kliente tuli juurde, vähenes, mõlemad diagrammis Matplotlib abil või mitte midagi.
 
 
+![Figure_1](https://github.com/Paul-HenryP/Proge_projekt23/assets/104301931/b1049d8f-80d1-42b2-ba52-3d3eedea40fa)
+
+
